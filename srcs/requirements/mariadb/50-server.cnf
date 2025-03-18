@@ -1,0 +1,11 @@
+[mysqld]
+user		= mysql
+bind		= 0.0.0.0
+datadir		= /var/lib/mysql
+pid-file	= /var/run/mysqld/mysqld.pid
+socket		= /var/run/mysqld/mysqld.sock
+port		= 3306
+symbolic-links = 0
+basedir		= /usr
+datadir		= /var/lib/mysql
+log_error	= /var/log/mysql/error.log

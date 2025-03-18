@@ -1,0 +1,87 @@
+docker rm [CONTAINER] ------------------- removes the container whose name is specified. 
+
+docker rmi [IMAGE ID] ------------------- removes image
+
+docker volume
+    create [OPTIONAL NAME] creates a new volume.
+    ls lists the volumes available
+    inspect [NAME] shows detailed volume information.
+    rm [NAME] removes a volume from Docker.
+
+docker ps [OPTIONS]
+	-a displays a list of running and exited containers
+	-s displays each container’s on-disk size and virtual size
+
+docker network [OPTIONS]
+    connect for connecting containers to networks
+    create for building new networks
+    disconnect for disconnecting running containers from networks
+    rm for removing single or multiple networks
+    
+docker history [IMAGE]
+
+docker container
+    create for creating a container
+    commit for creating a new image after changes to a container
+    exec for executing commands inside a running container
+    kill for stopping a running container
+    ls for displaying a list of containers within a Docker host
+    restart for restarting a container
+    run for creating a container from an image and running it
+    rm for removing a container from a Docker host
+
+docker logs
+
+
+docker build -t nginx . --------------------------------------------------------build image
+docker run -d -p 80:80 --name my-container my-image ----------------------------run container
+docker system prune --all --force --volumes ------------------------------------delete everything 
+docker stop $(docker ps -a -q) ------------------------------------------------stop all RUNNING containers
+docker exec -it my-container /bin/bash -----------------------------------------execute inside the container
+docker-compose up >> check.log 2>&1 --------------------------------------------output in file
+docker-compose ps --------------------------------------------------------------check all runnning containers
+
+docker-compose down  --------  docker-compose up -d - Recreate the container
+
+MARIADB:
+sudo netstat -tuln | grep LISTEN -----------------------------------------------check ports
+ps aux | grep mysqld -----------------------------------------------------------check running processes inside the container
+
+inside mariadb container: mysql -u root -p ->SHOW DATABASES;
+mysql -u$MARIADB_USER -p$MARIADB_PASSWORD -h$MARIADB_HOST $MARIADB_DATABASE -  Verify the credentials 	directly by trying to log into MariaDB from the command line
+
+SHOW DATABASES;
+USE inception;
+SHOW TABLES;
+SELECT * from wp_comments;
+
+
+
+NGINX:
+check inside the container if there are wp files and index in /var/www/html
+
+
+Website:
+	Leave a comment
+	approve with admin
+	close webpage
+	make down
+	make
+	check comment
+
+
+Network
+All services (mariadb, nginx, and wordpress) are connected to the inception network.
+This allows the services to communicate internally using container names as hostnames.
+
+A Docker image is like an instruction or template for creating a Docker container. Doesn't run.
+
+
+A Docker container is a lightweight, portable, and isolated environment where an application runs. 
+It's a running instance of the image.
+
+With TLS/SSL protocols, servers can send traffic safely between the server and clients 
+without the possibility of the messages being intercepted by outside parties. A self-signed certificate 
+is not signed by any of the trusted certificate authorities and
+users cannot use the certificate to validate the identity of your server automatically
+

@@ -1,0 +1,73 @@
+version: '3.8'
+ #DELETE ENV BEFORE PUSHING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    restart: unless-stopped
+#Ensures the container restarts automatically if it crashes, but not if it was stopped manually. 
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/mysql
+#whenever we address to /var/lib/mysql we can check wp-data
+# cause we use bind mount
+    networks:
+      - inception
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    volumes:
+      - wp-data:/var/www/html/
+    env_file:
+      - .env
+    networks:
+      - inception
+
+  nginx:
+    build: ./requirements/nginx
+    container_name: nginx
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - wp-data:/var/www/html/
+    networks:
+      - inception
+    ports:
+      - "443:443"
+
+
+networks:
+  inception:
+    driver: bridge
+#Use bridge for network configurations: When setting up the network for your containers, especially when you need them to communicate with each other.
+volumes:
+  wp-data:
+    driver: local
+#Use local for volume configurations: When setting up storage for your containers to persist data.
+    driver_opts:
+      type: none
+      o: bind
+#gets access to computer from docker
+      device: /home/akrepkov/data/wp
+      
+  db-data: #default
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/akrepkov/data/db #The path on the host machine that will be mounted inside the container. So it doesn't disappear
+
+
+# How a Bind Mount Works:
+#     Original Location: The data resides in its original directory.
+#     Mount Point: You create a bind mount that points another directory (the mount point) to the original directory or file. The data is accessible from both the original location and the new location.
+# Both locations refer to the exact same data on disk. Any changes made in one location are immediately reflected in the other.
+
